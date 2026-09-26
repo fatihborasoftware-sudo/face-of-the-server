@@ -2,7 +2,12 @@
 
 A living 3D particle figure for a server dashboard — it turns its head to follow you, assembles itself out of a swirl of particles when the page opens, glows when it speaks, and has a "scary" mode. One HTML file, no build step, no framework: three.js and hand-written GLSL shaders.
 
-![Face of the Server](docs/face-of-the-server-screenshot.png)
+![Face of the Server](docs/face.jpg)
+
+| | |
+|---|---|
+| ![Command Map](docs/command-map.jpg) *Command Map — vitals on the figure, crew and apps around it* | ![Speaking](docs/command-map-speaking.jpg) *The Watchman speaks: the arm clicks his node and his ID card opens* |
+| ![Scary](docs/face-scary.jpg) *☠ SCARY mode* | ![Original](docs/face-of-the-server-screenshot.png) *v1.0, the first version* |
 
 Built by **Fatih Bora / FB Software Solutions** together with Claude (Anthropic) in one afternoon, for the *FB Server* project — a home Ubuntu server that talks to its owner through an AI crew. This figure is "the face of the server": the voice of the crew (Serra) gets a body on the dashboard.
 
@@ -140,7 +145,7 @@ tools/patch_cam.py + tools/webcam.js    adds the CAMERA button (webcam look-at)
 tools/patch_cam2.py                     camera gain / priority tuning
 tools/patch_sound.py                    adds the assembly sound
 CHANGELOG.md                            what changed in each version
-docs/face-of-the-server-screenshot.png
+docs/*.jpg, docs/face-of-the-server-screenshot.png   screenshots
 CREDITS.md                              who made what, licences
 LICENSE                                 MIT for the code in this repository
 ```

@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Face of the Server</title>
+<title>FB Server Command Map</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap">
 <style>
   :root{color-scheme:dark;--bg:#000306;--cyan:#6fdcff;--amber:#ffb347;--ink:#d6eeff;--dim:#56728f;--line:#17304a}
@@ -38,12 +38,62 @@
   #vt-store .r em{font-style:normal;text-align:right;color:var(--g)}
   .vt.off{display:none}
   @media (max-width:900px){#vt-store,#vt-rings{display:none}}
+  /* ---------- command map overlay */
+  #map{position:fixed;inset:0;pointer-events:none;z-index:2}
+  #map svg{position:absolute;inset:0;width:100%;height:100%}
+  .node{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;display:flex;align-items:center;gap:12px;font-family:"Segoe UI",system-ui,sans-serif;font-size:19px;color:#e8f4ff;letter-spacing:.01em;user-select:none;transition:opacity .3s}
+  .node.left{flex-direction:row-reverse}
+  .node .ring{width:26px;height:26px;border-radius:50%;border:3px solid var(--c);box-shadow:0 0 12px var(--c),inset 0 0 6px color-mix(in srgb,var(--c) 40%,transparent);background:#03101a;position:relative;flex:none}
+  .node .ring::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--c);opacity:0;transition:opacity .25s}
+  .node:hover .ring::after,.node.on .ring::after{opacity:.9}
+  .node:hover .ring{box-shadow:0 0 22px var(--c),0 0 6px #fff}
+  .node.dim{color:#6f8496}.node.dim .ring{border-style:dashed;border-width:2px;box-shadow:none;opacity:.7}
+  .node.app{color:#e8f4ff}
+  .card{position:fixed;width:340px;background:#060c12f2;border:1px solid #1d3a57;border-radius:12px;box-shadow:0 0 40px #0b2c4a,0 0 0 1px #6fdcff22;padding:0;color:#cfe4f5;font-family:"IBM Plex Mono",ui-monospace,monospace;pointer-events:auto;z-index:5;display:none;backdrop-filter:blur(6px)}
+  .card.show{display:block;animation:pop .18s ease-out}
+  @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .card .hd{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #12283d}
+  .card .hd .ring{width:30px;height:30px;border-radius:50%;background:#0b1f30;display:grid;place-items:center;flex:none}
+  .card .hd .ring i{width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c)}
+  .card .hd b{display:block;font-size:13px;letter-spacing:.2em;color:var(--c)}
+  .card .hd small{font-size:9px;letter-spacing:.25em;color:#5d7a94}
+  .card .x{margin-left:auto;color:#5d7a94;cursor:pointer;font-size:16px;padding:4px 6px}.card .x:hover{color:#fff}
+  .card .bd{padding:12px 16px 14px}
+  .card h6{margin:8px 0 6px;font-size:9px;letter-spacing:.25em;color:#5d7a94;font-weight:400}
+  .card ul{margin:0;padding:0;list-style:none}.card li{font-size:12px;line-height:1.7;padding-left:12px;position:relative}
+  .card li::before{content:"";position:absolute;left:0;top:10px;width:4px;height:4px;background:var(--c);border-radius:1px}
+  .card .chips{display:flex;flex-wrap:wrap;gap:6px}.card .chip{font-size:11px;padding:5px 10px;border:1px solid #1d3a57;border-radius:6px;color:#dbeeff;cursor:pointer}
+  .card .chip:hover{border-color:var(--c)}
+  .card .ft{margin-top:12px;padding-top:10px;border-top:1px solid #12283d;font-size:9px;letter-spacing:.2em;color:#8fb0c8;display:flex;align-items:center;gap:8px}
+  .card .ft i{width:7px;height:7px;border-radius:50%;background:#3ddc84;box-shadow:0 0 8px #3ddc84}
+  .card .ft.off i{background:#6f8496;box-shadow:none}
+  .card .cmd{font-size:10px;color:#5d7a94;margin-top:6px}
+  .maplbl{position:fixed;left:24px;top:64px;font-size:9px;letter-spacing:.3em;color:#35516c;pointer-events:none}
+  @media (max-width:900px){.node{font-size:13px;gap:8px}.node .ring{width:18px;height:18px;border-width:2px}.card{width:min(340px,92vw)}}
+  .card .idc{border-radius:12px 12px 0 0;overflow:hidden;max-height:230px;background:#000}
+  .card .idc img{display:block;width:100%;height:230px;object-fit:cover;object-position:top}
+  .card.talk{box-shadow:0 0 60px var(--c),0 0 0 1px var(--c)}
+  .node.talk .ring{animation:talkring .9s ease-in-out infinite}
+  @keyframes talkring{0%,100%{box-shadow:0 0 12px var(--c)}50%{box-shadow:0 0 30px var(--c),0 0 8px #fff}}
+  .card .spk{padding:12px 16px 4px;border-bottom:1px solid #12283d}
+  .card .spk small{display:block;font-size:9px;letter-spacing:.3em;color:var(--c);margin-bottom:8px}
+  .card .bars{display:flex;gap:4px}
+  .card .bars i{flex:1;height:16px;border-radius:2px;background:var(--c);opacity:.25;animation:spkbar 1.1s ease-in-out infinite}
+  .card .bars i:nth-child(2n){animation-duration:.9s}.card .bars i:nth-child(3n){animation-duration:1.4s}.card .bars i:nth-child(5n){animation-delay:.3s}.card .bars i:nth-child(7n){animation-delay:.6s}
+  @keyframes spkbar{0%,100%{opacity:.25;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1);box-shadow:0 0 8px var(--c)}}
+  #map svg .beam{stroke-width:2.5;stroke-linecap:round;filter:drop-shadow(0 0 6px currentColor);animation:beam .7s ease-out forwards;stroke-dasharray:2000;stroke-dashoffset:2000}
+  @keyframes beam{0%{stroke-dashoffset:2000;opacity:1}40%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+  .node.hit .ring{animation:hitring .7s ease-out}
+  @keyframes hitring{0%{box-shadow:0 0 0 0 var(--c),0 0 30px var(--c)}100%{box-shadow:0 0 0 26px transparent,0 0 12px var(--c)}}
 </style>
 </head><body>
 
 
 <div id="stage"></div>
-<div class="hud"><div class="name">FBSERVER</div><div class="role">THE FACE OF THE SERVER</div></div>
+<div class="hud"><div class="name">FBSERVER</div><div class="role">COMMAND MAP · THE FACE OF THE SERVER</div></div>
+<div class="maplbl">CLICK A NODE · THE CREW AND THE APPS OF FBSERVER</div>
+<div id="map"><svg id="wires"></svg></div>
+<div class="card" id="card"></div>
 <div class="status" id="status">ASSEMBLING... 0%</div>
 <canvas id="vt-rings" class="vt"></canvas>
 <canvas id="vt-heart" class="vt"></canvas>
@@ -518,5 +568,90 @@ const ECO="3wB7AFltIQEAAOFzowETAf19hgEtA1JoHgHoAlJu0QFwA5R1xAG/Ao19vQGXBa5k1AEaB
   requestAnimationFrame(draw);
 })();
 </script>
+<script>
+// ---------- the command map: crew and apps of fbserver around the figure
+(() => {
+  const CY='#5fd6ff', AM='#f2a916', DM='#6f8496';
+  const N=[
+   // crew (cyan) — x,y are fractions of the screen
+   {id:'serra', spk:['serra'],   name:'Serra',        sub:'F2 · LEAD AI OPERATOR · fbspeak',      c:CY, x:.22,y:.42, handles:['Speaks every brief and every step out loud','Voice of the whole crew — one voice, eight members','Morning brief, night sign-off, spoken alerts'],  ex:['fbjobs say "good morning"','read the board first'], ft:'ONLINE — EVERY BRIEF IS ROUTED THROUGH HER'},
+   {id:'watch', spk:['watchman','watch'],   name:'The Watchman', sub:'F1 · SYSTEM GUARDIAN · fbwatch',       c:CY, x:.12,y:.54, handles:['Watches services, disks and temperature','Raises the alarm before something breaks','Health checks on every wake-up'],                     ex:['fbwatch','is the server healthy?'],            ft:'ONLINE — OVERSIGHT'},
+   {id:'locke', spk:['locke'],   name:'Agent Locke',  sub:'F3 · STORAGE CUSTODIAN · fbdisks',     c:CY, x:.12,y:.66, handles:['Every disk, mount and free gigabyte','The FB-Server drive and the backup disk','Never deletes — moves aside'],                                ex:['fbdisks','how much space is left?'],           ft:'ONLINE — VAULT'},
+   {id:'corren', spk:['corren'],  name:'Agent Corren', sub:'F4 · BACKUP SPECIALIST · fbbackup',    c:CY, x:.17,y:.78, handles:['Spot and daily backups to the backup disk','Restore tests in the lab container','The restore-info the whole crew relies on'],           ex:['fbbackup spot','restore test level 1'],        ft:'ONLINE — RECOVERY'},
+   {id:'quill', spk:['quill'],   name:'Agent Quill',  sub:'F5 · INTELLIGENCE ANALYST · fbtodo',   c:CY, x:.36,y:.10, handles:['The board: open cards, done cards, briefs','What was promised and to whom','Reads the cards before any order'],                        ex:['fbtodo list','what is the most important task?'], ft:'ONLINE — ARCHIVE'},
+   {id:'dusk', spk:['dusk'],    name:'Agent Dusk',   sub:'F6 · POWER MANAGER · fbsleep',         c:CY, x:.64,y:.10, handles:['Quiet hours and the goodnight','Sleep, wake and the morning service','Nothing speaks after lights-out'],                              ex:['fbsleep','goodnight Serra'],                  ft:'ONLINE — NIGHTFALL'},
+   {id:'relay', spk:['relay'],   name:'Agent Relay',  sub:'F8 · AUTOMATION COORDINATOR · fbjobs', c:CY, x:.80,y:.22, handles:['Scheduled jobs, rituals and fbday','Dispatches work to the right member','Timers, retries, the morning routine'],                       ex:['fbjobs list','run the morning ritual'],       ft:'ONLINE — DISPATCH'},
+   {id:'mason', spk:['mason'],   name:'Agent Mason',  sub:'F7 · SITE ENGINEER · fbsite',          c:CY, x:.88,y:.36, handles:['Builds and serves the websites on the server','The only member who creates','Moves a removed site aside, never deletes'],          ex:['fbsite new','list the sites'],                ft:'ONLINE — BUILD'},
+   // apps (amber)
+   {id:'cockpit', name:'Cockpit',      sub:'SYSTEM CONSOLE · PORT 9090',            c:AM, x:.89,y:.52, app:true, handles:['Terminal, services, logs, updates','Where Claude types the commands','The login screen of the server'],               ex:['open the terminal','show the services'],      ft:'ONLINE — SYSTEM'},
+   {id:'panel',   name:'FB Panel',     sub:'HOSTING PANEL · PROTOTYPE',             c:AM, x:.85,y:.68, app:true, handles:['The cPanel-style dashboard of the series','Customer and admin side','Built along on YouTube'],                          ex:['open FB Panel','show the customer view'],     ft:'PROTOTYPE — IN THE SERIES'},
+   {id:'drive',   name:'FB Drive',     sub:'FILES · /srv/disk/FB-Server',           c:AM, x:.30,y:.90, app:true, handles:['The shared drive of the server','Backups folder, media, the guide','Online from the browser'],                              ex:['open the drive','where are the backups?'],    ft:'ONLINE — STORAGE'},
+   {id:'console', name:'fbconsole',    sub:'CREW CONSOLE · 0.2',                    c:AM, x:.40,y:.90, app:true, handles:['The crew\'s own console app','Cards, briefs and the status of each member','Runs as its own service user'],           ex:['fbconsole','who is on duty?'],                ft:'ONLINE — CREW'},
+   {id:'lab',     name:'fblab',        sub:'TEST LAB · INCUS CONTAINERS',           c:AM, x:.60,y:.90, app:true, handles:['A throw-away copy of the server','Where restore tests run safely','Its own network, fblab0'],                              ex:['fblab start','run the restore in the lab'],   ft:'ONLINE — LAB'},
+   {id:'guide',   name:'FB Guide',     sub:'DOCS · fbserver.net',                   c:AM, x:.76,y:.84, app:true, handles:['Setup and access guide','The YouTube build-along','The public site of the project'],                                       ex:['open the guide','show the videos'],           ft:'ONLINE — PUBLIC'},
+  ];
+  const map=document.getElementById('map'), svg=document.getElementById('wires'), card=document.getElementById('card');
+  const els=[];
+  for(const n of N){ const d=document.createElement('div'); d.className='node'+(n.x<0.5?' left':'')+(n.dim?' dim':'')+(n.app?' app':''); d.style.setProperty('--c',n.c);
+    d.innerHTML='<span class="ring"></span><span class="lbl">'+n.name+'</span>'; d.onclick=e=>{e.stopPropagation(); open(n,d);}; map.appendChild(d); els.push([n,d]); }
+  function layout(){ const W=innerWidth,H=innerHeight; svg.setAttribute('viewBox','0 0 '+W+' '+H); let g='';
+    for(const [n,d] of els){ const x=n.x*W, y=n.y*H; d.style.left=x+'px'; d.style.top=y+'px';
+      const dir=n.x<0.5?-1:1, edge=dir<0?18:W-18, mid=x+dir*(60+((n.id.length*37)%90)), step=(((n.id.charCodeAt(0)*13)%2)?-1:1)*(18+(n.id.length*7)%26);
+      const col=n.dim?'#3f5568':(n.app?'#7a5a12':'#1f6f8f');
+      g+=`<polyline points="${x+dir*22},${y} ${mid},${y} ${mid+dir*22},${y+step} ${edge},${y+step}" fill="none" stroke="${col}" stroke-width="1.4" opacity=".8"/>`;
+      g+=`<circle cx="${edge}" cy="${y+step}" r="3.5" fill="${n.dim?'#3f5568':(n.app?'#c9871a':'#5fd6ff')}" opacity=".9"/>`;
+      // faint link toward the figure
+      g+=`<line x1="${x-dir*18}" y1="${y}" x2="${W/2+(x-W/2)*0.38}" y2="${H*0.5+(y-H*0.5)*0.45}" stroke="${col}" stroke-width="1" opacity=".28" stroke-dasharray="3 5"/>`; }
+    svg.innerHTML=g; }
+  addEventListener('resize',layout); layout();
+  let cur=null;
+  function open(n,d){ els.forEach(([m,e])=>e.classList.toggle('on',m===n)); cur=n;
+    card.style.setProperty('--c',n.c);
+    card.innerHTML=(n._img?`<div class="idc"><img src="${n._img}" alt="" onerror="this.parentNode.remove()"></div>`:'')+`<div class="hd"><span class="ring"><i></i></span><div><b>${n.name.toUpperCase()}</b><small>${n.sub}</small></div><span class="x" id="cx">✕</span></div>
+      ${n._img!==undefined&&n===talking?'<div class="spk"><small>SPEAKING</small><div class="bars">'+'<i></i>'.repeat(14)+'</div></div>':''}
+      <div class="bd"><h6>WHAT IT HANDLES</h6><ul>${n.handles.map(h=>'<li>'+h+'</li>').join('')}</ul>
+      <h6>EXAMPLE REQUESTS</h6><div class="chips">${n.ex.map(e=>'<span class="chip">'+e+'</span>').join('')}</div>
+      <div class="ft${n.off?' off':''}"><i></i>${n.ft}</div></div>`;
+    card.classList.add('show');
+    const W=innerWidth,H=innerHeight, r=d.getBoundingClientRect(); let cx=n.x<0.5?r.right+16:r.left-356, cy=Math.min(H-300,Math.max(60,r.top-40)); cx=Math.max(12,Math.min(W-352,cx));
+    card.style.left=cx+'px'; card.style.top=cy+'px';
+    document.getElementById('cx').onclick=e=>{e.stopPropagation(); close();};
+    // the figure turns to the node
+    if(window.serraLookAt) window.serraLookAt(n.x*2-1, n.y*2-1);
+    card.classList.toggle('talk',!!n._img);
+    card.querySelectorAll('.chip').forEach(ch=>ch.onclick=e=>{e.stopPropagation(); const cap=document.getElementById('caption'); if(cap) cap.textContent=n.name+' · '+ch.textContent; });
+  }
+  // ---------- who is talking: the server writes the agent's name to /speaking while the voice plays
+  const inPanels=location.pathname.indexOf('/panels/')>=0, root=inPanels?'../':'';
+  let talking=null, clearT=0, manual=false;
+  function showTalking(name){ const key=(name||'').toLowerCase().trim(); if(!key){ if(talking&&!clearT) clearT=setTimeout(()=>{ if(!manual){ close(); if(window.sfx) window.sfx('close'); } talking=null; clearT=0; els.forEach(([m,e])=>{e.classList.remove('talk');e.classList.remove('hit');}); if(window.serraArm) window.serraArm(armSide,0,0); },1500); return; }
+    if(clearT){ clearTimeout(clearT); clearT=0; }
+    const n=N.find(m=>m.spk&&m.spk.some(k=>key.indexOf(k)>=0)); if(!n||talking===n) return; talking=n; manual=false;
+    n._img=root+'crew/card-'+key+'.png'; const d=els.find(([m])=>m===n)[1]; els.forEach(([m,e])=>e.classList.toggle('talk',m===n));
+    gesture(n,d); }
+  let armSide=0, gestureT=0;
+  function gesture(n,d){ if(!window.serraArm||!window.serraProject){ open(n,d); return; }
+    const side=n.x<0.5?-1:1; armSide=side; const [sx,sy]=window.serraProject(side*0.46,-0.30,0); const nx=n.x*innerWidth, ny=n.y*innerHeight;
+    const dx=nx-sx, dy=-(ny-sy); let phi=Math.atan2(dx,-dy); phi=Math.max(-2.75,Math.min(2.75,phi));
+    window.serraArm(side,phi,0.45); if(window.sfx) window.sfx('whoosh'); if(window.serraLookAt) window.serraLookAt(n.x*2-1,n.y*2-1);
+    const my=++gestureT;
+    setTimeout(()=>{ if(gestureT!==my||talking!==n) return;
+      // the "click": a pulse from the hand to the node, the ring flashes, sound, card
+      const [hx,hy]=window.serraHand(side); const beam=document.createElementNS('http://www.w3.org/2000/svg','line'); beam.setAttribute('x1',hx); beam.setAttribute('y1',hy); beam.setAttribute('x2',nx); beam.setAttribute('y2',ny); beam.setAttribute('class','beam'); beam.style.stroke=n.c; svg.appendChild(beam); setTimeout(()=>beam.remove(),700);
+      d.classList.remove('hit'); void d.offsetWidth; d.classList.add('hit'); if(window.sfx){ window.sfx('click'); setTimeout(()=>window.sfx('open'),140); }
+      setTimeout(()=>{ if(talking===n) open(n,d); },160); },2600); }
+  async function pollSpeaking(){ try{ const r=await fetch(root+'speaking?t='+Date.now(),{cache:'no-store'}); if(r.ok) showTalking(await r.text()); }catch(e){} }
+  setInterval(pollSpeaking,500);
+  window.fbTalk=showTalking;   // for tests: fbTalk('serra') / fbTalk('')
+  // in the preview there is no server: the SPEAKING button plays Serra, so show her card for that line
+  const sb=document.getElementById('speak'); if(sb) sb.addEventListener('click',()=>{ setTimeout(()=>{ const n=N.find(m=>m.id==='serra'); n._img=null; showTalking('serra'); },0); setTimeout(()=>showTalking(''),6500); });
+  const _open=open; // manual clicks keep the card until closed
+  els.forEach(([n,d])=>{ d.onclick=e=>{ e.stopPropagation(); manual=true; if(n!==talking) n._img=null; _open(n,d); }; });
+  function close(){ card.classList.remove('show'); els.forEach(([m,e])=>e.classList.remove('on')); cur=null; }
+  document.addEventListener('click',e=>{ if(!card.contains(e.target)&&!talking) close(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') close(); });
+})();
+</script>
+
 
 </body></html>

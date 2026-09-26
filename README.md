@@ -6,7 +6,7 @@ A living 3D particle figure for a server dashboard — it turns its head to foll
 
 Built by **Fatih Bora / FB Software Solutions** together with Claude (Anthropic) in one afternoon, for the *FB Server* project — a home Ubuntu server that talks to its owner through an AI crew. This figure is "the face of the server": the voice of the crew (Serra) gets a body on the dashboard.
 
-*Türkçe:* Bu proje bir sunucu panosu için canlı bir 3B parçacık figürü. Fareyi (ileride web kamerasını) takip eder, sayfa açılınca parçacıklardan kendini kurar, konuşurken parlar. Tek bir HTML dosyası; kurulum yok. Nasıl yapıldığı adım adım aşağıda.
+*Türkçe:* Bu proje bir sunucu panosu için canlı bir 3B parçacık figürü. Fareyi veya web kamerasını takip eder, sayfa açılınca parçacıklardan kendini kurar, konuşurken parlar. Tek bir HTML dosyası; kurulum yok. Nasıl yapıldığı adım adım aşağıda.
 
 ---
 
@@ -21,6 +21,11 @@ Open `index.html` in a modern browser (Chrome, Edge, Firefox). It needs internet
 | **↻ REPLAY** | replays the assembly: particles stream in from an orb and form the body |
 | **☠ SCARY** | blood-red palette, hot white eyes, head twitches, camera shake, screen tears |
 | **■ QUIET** | stops the voice |
+| **◉ CAMERA** | the figure looks at *you* through the webcam (face detection, motion fallback) — needs https or localhost |
+
+`map.html` is the **Command Map**: the same figure with the server's vitals on it — a beating heart with the network graph, load rings behind the body, the storage list, veins that light up per heartbeat and change colour with the server status — and a radial map of the AI crew and apps around it. When a crew member speaks, the figure raises an arm, clicks the node, and the member's ID card pops open with a sound.
+
+Add `?lite` to either page on a weak GPU (no bloom, fewer particles, no landscape). Localhost opens in lite mode by itself (that is the server's own screen).
 
 For your own app the only hook you need is:
 
@@ -104,11 +109,37 @@ python3 tools/build_body.py your-model.glb --ycut <y> --inject index.html
 - Any GLB works: the script applies the scene transforms and samples the base-colour texture if there is one (that is where the pale "tendon" tint comes from).
 - After injecting, check three numbers in `index.html` that depend on where the head is in *your* model: `PIVOT` (neck height), `bw()` in `bendGLSL` (where the bend fades in), and the core/eye positions in `aim()`.
 
+## Make it yours
+
+Everything is in one file per page, in plain JavaScript and GLSL, and every number is near a comment saying what it does. Places people usually start:
+
+| Want to change… | Look for |
+|---|---|
+| colours | `--cyan` / `--amber` in the CSS, `uVeinCol`, and `applyStatus()` for the status colours |
+| how fast / slow the assembly is | `BUILD_MS` |
+| the assembly sound, the click / open / close sounds | `window.sfx` (a tiny WebAudio synth — no sound files) |
+| how far the head turns, idle wander | `aim()`, `serraLookAt()` |
+| the arm gesture | `serraArm()`, `armL()` in `bendGLSL`, `gesture()` in map.html |
+| the heart, ECG, BPM | the `heart` canvas block (`BPM = 58 + cpu·0.8`) |
+| which agents / apps are on the map and where | the node list `N` in map.html (`x`, `y` are fractions of the screen) |
+| where the vitals come from | `data.json` from fbconsole and `/speaking` — replace the fetches with your own JSON |
+| the 3D body | `tools/build_body.py` (below) |
+
+The `tools/patch_*.py` scripts are the actual patches we applied on the server, one feature each (lite mode, webcam, camera tuning, assembly sound). They are a good template for adding your own feature without touching the rest: find an anchor line, replace it, keep it idempotent.
+
+Versions are tagged (`v1.0`, `v1.1`, …) and listed in `CHANGELOG.md`, so you can fork any of them.
+
 ## Files
 
 ```
-index.html                              the whole thing (2.3 MB, body data included)
+index.html                              the Face (2.3 MB, body data included)
+map.html                                the Command Map (Face + vitals + crew map)
 tools/build_body.py                     GLB → embedded body data (crop, decimate, quantise, inject)
+tools/patch_lite.py                     adds the ?lite mode
+tools/patch_cam.py + tools/webcam.js    adds the CAMERA button (webcam look-at)
+tools/patch_cam2.py                     camera gain / priority tuning
+tools/patch_sound.py                    adds the assembly sound
+CHANGELOG.md                            what changed in each version
 docs/face-of-the-server-screenshot.png
 CREDITS.md                              who made what, licences
 LICENSE                                 MIT for the code in this repository

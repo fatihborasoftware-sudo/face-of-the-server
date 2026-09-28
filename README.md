@@ -2,12 +2,14 @@
 
 A living 3D particle figure for a server dashboard — it turns its head to follow you, assembles itself out of a swirl of particles when the page opens, glows when it speaks, and has a "scary" mode. One HTML file, no build step, no framework: three.js and hand-written GLSL shaders.
 
-![Face of the Server](docs/face.jpg)
+![Khoa — the Face of the Server](docs/khoa.jpg)
+
+**Meet Khoa.** Since v1.2 the figure has a name and a voice: he speaks as the server, announces what is happening (backups, heat, intrusions…) and introduces himself. See [Khoa — the talking server](#khoa--the-talking-server) below.
 
 | | |
 |---|---|
-| ![Command Map](docs/command-map.jpg) *Command Map — vitals on the figure, crew and apps around it* | ![Speaking](docs/command-map-speaking.jpg) *The Watchman speaks: the arm clicks his node and his ID card opens* |
-| ![Scary](docs/face-scary.jpg) *☠ SCARY mode* | ![Original](docs/face-of-the-server-screenshot.png) *v1.0, the first version* |
+| ![Command Map](command-map.jpg) *Command Map — vitals on the figure, crew and apps around it* | ![Speaking](command-map-speaking.jpg) *The Watchman speaks: the arm clicks his node and his ID card opens* |
+| ![Scary](face-scary.jpg) *☠ SCARY mode* | ![Original](docs/face-of-the-server-screenshot.png) *v1.0, the first version* |
 
 Built by **Fatih Bora / FB Software Solutions** together with Claude (Anthropic) in one afternoon, for the *FB Server* project — a home Ubuntu server that talks to its owner through an AI crew. This figure is "the face of the server": the voice of the crew (Serra) gets a body on the dashboard.
 
@@ -28,7 +30,7 @@ Open `index.html` in a modern browser (Chrome, Edge, Firefox). It needs internet
 | **■ QUIET** | stops the voice |
 | **◉ CAMERA** | the figure looks at *you* through the webcam (face detection, motion fallback) — needs https or localhost |
 
-`map.html` is the **Command Map**: the same figure with the server's vitals on it — a beating heart with the network graph, load rings behind the body, the storage list, veins that light up per heartbeat and change colour with the server status — and a radial map of the AI crew and apps around it. When a crew member speaks, the figure raises an arm, clicks the node, and the member's ID card pops open with a sound.
+`map.html` is the **Command Map**: the same figure with the server's vitals on it — a beating heart with the network graph, load rings behind the body, the storage list, veins that light up per heartbeat and change colour with the server status — and a radial map of the AI crew and apps around it, each member with their ID card next to their node. When a crew member speaks, the figure raises an arm, clicks the node, and the member's ID card pops open with a sound.
 
 Add `?lite` to either page on a weak GPU (no bloom, fewer particles, no landscape). Localhost opens in lite mode by itself (that is the server's own screen).
 
@@ -39,6 +41,31 @@ window.serraLookAt(nx, ny);   // nx, ny in -1..1 (screen coordinates); call it f
 ```
 
 and the `speaking` state: push a pulse into `pulses` (see the `speak` button handler) while your TTS plays.
+
+---
+
+## Khoa — the talking server
+
+v1.2 gives the figure a name, **Khoa**, and a voice. Open `index.html` and press **▶ INTRO** — he introduces himself.
+
+| Control | What it does |
+|---|---|
+| **▶ INTRO** | the cinematic introduction: camera pushes in, captions appear word by word |
+| **◈ SITUATIONS** / keys **0–8** | simulate a server situation: backup, intrusion, heat, memory, ssd, load, update, alarm, normal — title, colour, gauge and a spoken sentence |
+| **♪ VOICE** | choose the voice (on the server: the Piper voices; elsewhere: your browser's voices) |
+
+**On your own server** Khoa talks through a small local service:
+
+```bash
+sudo cp khoa/khoa /usr/local/bin/khoa && sudo chmod +x /usr/local/bin/khoa
+python3 khoa/khoa-tts.py        # listens on 127.0.0.1:8082 (run it as a systemd service)
+khoa say "Fatih, the backup finished. Twenty eight gigabytes." --sit backup
+khoa say "The processor is at sixty three degrees." --sit heat --value 63
+```
+
+`khoa-tts.py` expects [Piper](https://github.com/rhasspy/piper) and its voices — change `PIPER` and `VOICES` at the top of the file to where yours are. The page polls `/queue?since=N` every 1.5 s and speaks each new line; a line with `--sit` switches the situation first. Hook it to anything: a backup script, a temperature check, failed logins. Without the service (for example when you open the page from GitHub) Khoa uses the browser's built-in voice.
+
+`voices.html` plays the voice samples side by side so you can pick one.
 
 ---
 
@@ -132,20 +159,21 @@ Everything is in one file per page, in plain JavaScript and GLSL, and every numb
 
 The `tools/patch_*.py` scripts are the actual patches we applied on the server, one feature each (lite mode, webcam, camera tuning, assembly sound). They are a good template for adding your own feature without touching the rest: find an anchor line, replace it, keep it idempotent.
 
-Versions are tagged (`v1.0`, `v1.1`, …) and listed in `CHANGELOG.md`, so you can fork any of them.
+Versions are tagged (`v1.1`, `v1.2`, …) and listed in `CHANGELOG.md`, so you can fork any of them.
 
 ## Files
 
 ```
-index.html                              the Face (2.3 MB, body data included)
+index.html                              the Face — Khoa (2.4 MB, body data included)
 map.html                                the Command Map (Face + vitals + crew map)
+voices.html                             Khoa's voice samples
+khoa/khoa                               the `khoa say` command
+khoa/khoa-tts.py                        Khoa's voice + message queue (local service, port 8082)
 tools/build_body.py                     GLB → embedded body data (crop, decimate, quantise, inject)
-tools/patch_lite.py                     adds the ?lite mode
-tools/patch_cam.py + tools/webcam.js    adds the CAMERA button (webcam look-at)
-tools/patch_cam2.py                     camera gain / priority tuning
-tools/patch_sound.py                    adds the assembly sound
+tools/patch_*.py                        every feature as its own patch, in the order it was built (see CHANGELOG.md)
+tools/webcam.js, thumbs.json, logo.b64  data used by the patches
 CHANGELOG.md                            what changed in each version
-docs/*.jpg, docs/face-of-the-server-screenshot.png   screenshots
+docs/*.jpg, docs/*.png                  screenshots
 CREDITS.md                              who made what, licences
 LICENSE                                 MIT for the code in this repository
 ```

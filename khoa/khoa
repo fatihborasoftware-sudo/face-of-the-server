@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+# khoa - talk through the Face of the Server.   khoa say "text" [--sit heat|backup|intrusion|memory|ssd|load|update|alarm|normal]
+#                                                              [--value 63] [--title WORD] [--sub "small line"]
+# The Face page (face.html) polls the queue and speaks the line with Alan's voice, captions and the situation gauge.
+import sys, urllib.request, urllib.parse
+args=sys.argv[1:]; sit=title=sub=value=''; words=[]; i=0
+while i<len(args):
+    a=args[i]
+    if a in('--sit','-s') and i+1<len(args): sit=args[i+1]; i+=2; continue
+    if a=='--title' and i+1<len(args): title=args[i+1]; i+=2; continue
+    if a=='--sub' and i+1<len(args): sub=args[i+1]; i+=2; continue
+    if a=='--value' and i+1<len(args): value=args[i+1]; i+=2; continue
+    if a=='say' and not words: i+=1; continue
+    words.append(a); i+=1
+text=' '.join(words).strip()
+if not text and not sit:
+    print(__doc__ or 'usage: khoa say "text" [--sit NAME] [--value N] [--title T] [--sub S]'); sys.exit(1)
+data=urllib.parse.urlencode({'text':text,'sit':sit,'title':title,'sub':sub,'value':value}).encode()
+try:
+    r=urllib.request.urlopen('http://127.0.0.1:8082/queue',data,timeout=5).read().decode()
+    print('khoa:',r)
+except Exception as e:
+    print('khoa-tts not reachable:',e); sys.exit(2)

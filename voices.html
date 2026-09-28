@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Khoa - voice samples</title>
+<style>
+body{margin:0;background:#000306;color:#d6eeff;font:13px/1.6 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.06em;padding:28px 24px}
+h1{font-size:14px;letter-spacing:.35em;color:#6fdcff;font-weight:400;margin:0 0 4px} p{color:#56728f;margin:0 0 18px}
+table{border-collapse:collapse;width:100%;max-width:1100px} th{font-size:10px;letter-spacing:.3em;color:#56728f;font-weight:400;text-align:left;padding:8px 10px;border-bottom:1px solid #17304a}
+td{padding:8px 10px;border-bottom:1px solid #0d1c2c;vertical-align:middle} td b{font-weight:400;color:#e8f4ff} td small{color:#56728f;display:block}
+button{background:#06111c;border:1px solid #1d3a57;color:#cfe4f5;font:inherit;letter-spacing:.14em;padding:6px 12px;border-radius:6px;cursor:pointer;margin:2px}
+button:hover{background:#0f2238} button.on{border-color:#6fdcff;color:#6fdcff;box-shadow:0 0 12px #6fdcff55} button.pick{border-color:#39ff6a;color:#39ff6a}
+#now{margin:16px 0;color:#ffb347;min-height:1.6em} #line{width:100%;max-width:1100px;box-sizing:border-box;background:#06111c;border:1px solid #1d3a57;color:#e8f4ff;font:inherit;padding:8px 10px;border-radius:6px;margin-bottom:14px}
+</style></head><body>
+<h1>KHOA &middot; VOICE SAMPLES</h1><p>Press a button to hear a sample. "Use this" makes it Khoa's voice on the Face panel (this browser). Edit the sentence if you like.</p>
+<input id="line" value="Khoa online. CPU at 14 percent, temperature 45 degrees, 67 gigabytes free. All systems nominal. Intrusion detected. Firewall holding.">
+<div id="now"></div>
+<table><thead><tr><th>voice</th><th>natural</th><th>deep</th><th>very deep</th><th>deep + hall</th></tr></thead><tbody id="rows"></tbody></table>
+<script>
+const V=[['ryan','Ryan','American, warm, low'],['joe','Joe','American, calm, older'],['alan','Alan','British, precise'],['northern_english_male','Northern English','British, gruff'],['norman','Norman','American, deep narrator'],['lessac','Lessac','American, clear studio'],['cori','Cori','British, soft'],['semaine','Semaine','British, theatrical']];
+const P=[['natural',1.0,0],['deep',0.88,0],['very deep',0.80,0],['deep + hall',0.88,1]];
+let AC=null, cur=null, curBtn=null; const ac=()=>{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended') AC.resume(); return AC; };
+function impulse(c,sec,decay){ const n=c.sampleRate*sec, b=c.createBuffer(2,n,c.sampleRate); for(let ch=0;ch<2;ch++){ const d=b.getChannelData(ch); for(let i=0;i<n;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/n,decay); } return b; }
+async function play(v,rate,hall,btn){ const c=ac(); if(cur){ try{cur.pause();}catch(e){} } if(curBtn) curBtn.classList.remove('on'); curBtn=btn; btn.classList.add('on');
+  document.getElementById('now').textContent='loading '+v+' ...';
+  const r=await fetch('/khoa/say?text='+encodeURIComponent(document.getElementById('line').value)+'&v='+v); if(!r.ok){ document.getElementById('now').textContent='no such voice on the server: '+v; btn.classList.remove('on'); return; }
+  const a=new Audio(URL.createObjectURL(await r.blob())); cur=a; a.playbackRate=rate; try{ a.preservesPitch=false; }catch(e){}
+  const s=c.createMediaElementSource(a); const lo=c.createBiquadFilter(); lo.type='lowshelf'; lo.frequency.value=180; lo.gain.value=rate<1?5:2; const pr=c.createBiquadFilter(); pr.type='peaking'; pr.frequency.value=2600; pr.Q.value=0.9; pr.gain.value=3;
+  const cp=c.createDynamicsCompressor(); cp.threshold.value=-22; cp.knee.value=12; cp.ratio.value=3; cp.attack.value=0.005; cp.release.value=0.2; const g=c.createGain(); g.gain.value=1.25;
+  s.connect(lo); lo.connect(pr); pr.connect(cp); cp.connect(g); g.connect(c.destination);
+  if(hall){ const cv=c.createConvolver(); cv.buffer=impulse(c,1.6,3.5); const wet=c.createGain(); wet.gain.value=0.28; g.connect(cv); cv.connect(wet); wet.connect(c.destination); }
+  document.getElementById('now').textContent='playing: '+v+' / '+(rate===1?'natural':rate===0.88?'deep':'very deep')+(hall?' + hall':''); a.onended=()=>{ btn.classList.remove('on'); document.getElementById('now').textContent=''; }; a.play(); }
+function pick(v,rate,hall){ localStorage.setItem('fbSrvVoice',v); localStorage.setItem('fbVoiceDeep',String(rate)); localStorage.setItem('fbVoiceHall',hall?'1':'0'); document.querySelectorAll('button.pick').forEach(b=>b.textContent='use this'); event.target.textContent='chosen'; document.getElementById('now').textContent='Khoa will use '+v+' ('+(rate===1?'natural':rate===0.88?'deep':'very deep')+(hall?' + hall':'')+'). Reload the Face panel.'; }
+const tb=document.getElementById('rows'); for(const [id,name,desc] of V){ const tr=document.createElement('tr'); let h='<td><b>'+name+'</b><small>'+desc+'</small></td>'; for(const [pn,rate,hall] of P){ h+='<td><button onclick="play(\''+id+'\','+rate+','+hall+',this)">&#9654; play</button><button class="pick" onclick="pick(\''+id+'\','+rate+','+hall+')">use this</button></td>'; } tr.innerHTML=h; tb.appendChild(tr); }
+</script></body></html>

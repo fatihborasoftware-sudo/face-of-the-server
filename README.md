@@ -6,6 +6,8 @@ A living 3D particle figure for a server dashboard — it turns its head to foll
 
 **Meet Khoa.** Since v1.2 the figure has a name and a voice: he speaks as the server, announces what is happening (backups, heat, intrusions…) and introduces himself. See [Khoa — the talking server](#khoa--the-talking-server) below.
 
+**New in v1.3: Khoa on a website.** A free WordPress plugin puts him on any site — live 3D, recorded voice in English and Turkish, the nine situations and the Command Map of his crew, all with demo data. See him live at **[khoa.fbserver.net](https://khoa.fbserver.net)** and read [Khoa on your WordPress site](#khoa-on-your-wordpress-site-v13).
+
 | | |
 |---|---|
 | ![Command Map](command-map.jpg) *Command Map — vitals on the figure, crew and apps around it* | ![Speaking](command-map-speaking.jpg) *The Watchman speaks: the arm clicks his node and his ID card opens* |
@@ -66,6 +68,30 @@ khoa say "The processor is at sixty three degrees." --sit heat --value 63
 `khoa-tts.py` expects [Piper](https://github.com/rhasspy/piper) and its voices — change `PIPER` and `VOICES` at the top of the file to where yours are. The page polls `/queue?since=N` every 1.5 s and speaks each new line; a line with `--sit` switches the situation first. Hook it to anything: a backup script, a temperature check, failed logins. Without the service (for example when you open the page from GitHub) Khoa uses the browser's built-in voice.
 
 `voices.html` plays the voice samples side by side so you can pick one.
+
+---
+
+## Khoa on your WordPress site (v1.3)
+
+![khoa.fbserver.net](docs/website-hero.jpg)
+
+| | |
+|---|---|
+| ![Command Map on the site](docs/website-command-map.jpg) *PANELS → Command Map: make an agent speak, Khoa turns and opens the ID card* | ![Turkish](docs/website-face-tr.jpg) *The Turkish page: every label, voice line and card in Turkish* |
+
+The folder `wordpress/` holds **FB Khoa**, the plugin that runs [khoa.fbserver.net](https://khoa.fbserver.net). Install `wordpress/fb-khoa-1.2.1.zip` (Plugins → Add New → Upload Plugin) and you get two Elementor widgets — and two shortcodes if you do not use Elementor:
+
+| Widget / shortcode | What it shows |
+|---|---|
+| **Khoa Hero** / `[khoa_hero]` | Full-screen Khoa with your title and text; the **Meet Khoa** button plays his spoken intro, and your title fades while he talks |
+| **Khoa Stage** / `[khoa_stage]` | A **PANELS** switch — *Face of the Server* with the nine situation buttons, or the *Command Map* with “SPEAK · Serra … Mason” buttons |
+
+- **No server needed.** Everything runs on demo data; nothing connects to a real machine.
+- **Two languages.** English and Turkish, following the page language (Polylang, or the site language). Khoa’s lines are recorded with Piper — English “Alan”, Turkish “dfki” shaped as the *voice of the server* — and play from the plugin itself.
+- **Light on phones.** Phones get the lite renderer automatically, the Command Map shows the crew only, and Khoa pauses when he is scrolled out of view.
+- **Everything is editable.** Every text is a normal Elementor field; the page around Khoa is ordinary Elementor.
+
+How the web versions are made — the same idea as the patches on the server: `wordpress/fb-khoa/app/tools/patch_site.py` turns `index.html` into `khoa-web.html`, `patch_map.py` turns `map.html` into `map-web.html` (demo data, local three.js, recorded voice, Turkish texts in `texts.py`, `map_texts.py` and `web_i18n.py`, clean crew cards in `thumbs_clean.json`). Run them from that folder with the two source pages next to them.
 
 ---
 
@@ -159,7 +185,7 @@ Everything is in one file per page, in plain JavaScript and GLSL, and every numb
 
 The `tools/patch_*.py` scripts are the actual patches we applied on the server, one feature each (lite mode, webcam, camera tuning, assembly sound). They are a good template for adding your own feature without touching the rest: find an anchor line, replace it, keep it idempotent.
 
-Versions are tagged (`v1.1`, `v1.2`, …) and listed in `CHANGELOG.md`, so you can fork any of them.
+Versions are tagged (`v1.1`, `v1.2`, `v1.3`, …) and listed in `CHANGELOG.md`, so you can fork any of them.
 
 ## Files
 
@@ -173,6 +199,8 @@ tools/build_body.py                     GLB → embedded body data (crop, decima
 tools/patch_*.py                        every feature as its own patch, in the order it was built (see CHANGELOG.md)
 tools/webcam.js, thumbs.json, logo.b64  data used by the patches
 CHANGELOG.md                            what changed in each version
+wordpress/fb-khoa/                      the FB Khoa WordPress plugin (source)
+wordpress/fb-khoa-1.2.1.zip             the same plugin, ready to upload to WordPress
 docs/*.jpg, docs/*.png                  screenshots
 CREDITS.md                              who made what, licences
 LICENSE                                 MIT for the code in this repository

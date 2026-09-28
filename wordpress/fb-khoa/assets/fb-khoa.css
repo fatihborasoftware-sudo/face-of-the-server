@@ -1,0 +1,73 @@
+/* FB Khoa — hero + stage. Everything is scoped under .khoa-hero / .khoa-stage so it never touches the theme. */
+.khoa-hero,.khoa-stage{--k-bg:#000306;--k-ink:#d6eeff;--k-dim:#9fb6cc;--k-mute:#7f99b3;--k-line:#0f2233;--k-line2:#1f4b66;--k-cyan:#6fdcff;--k-green:#4dff7a;--k-amber:#ffb347;
+  font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;color:var(--k-ink);box-sizing:border-box}
+.khoa-hero *,.khoa-stage *{box-sizing:border-box}
+
+/* ---------- hero */
+.khoa-hero{position:relative;width:100%;height:var(--khoa-h,100vh);min-height:560px;overflow:hidden;background:var(--k-bg)}
+.khoa-hero .khoa-frame{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;background:var(--k-bg)}
+.khoa-hero__over{position:absolute;left:clamp(16px,4vw,56px);top:50%;transform:translateY(-50%);width:min(560px,44vw);display:flex;flex-direction:column;gap:18px;
+  pointer-events:none;transition:opacity .8s ease,transform .8s ease;z-index:2}
+.khoa-hero__over a,.khoa-hero__over button{pointer-events:auto}
+.khoa-hero.is-onstage .khoa-hero__over{opacity:0;transform:translateY(-50%) translateX(-24px)}
+.khoa-hero.is-onstage .khoa-hero__over a,.khoa-hero.is-onstage .khoa-hero__over button{pointer-events:none}
+.khoa-eyebrow{font-size:12px;letter-spacing:.4em;color:var(--k-cyan)}
+.khoa-eyebrow--live{color:var(--k-green)}
+.khoa-hero__title{margin:0;font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:900;font-size:clamp(88px,11.5vw,168px);line-height:.86;letter-spacing:.04em;color:#fff;text-shadow:0 0 40px #6fdcff33}
+.khoa-hero__sub{font-size:15px;letter-spacing:.42em;color:var(--k-cyan)}
+.khoa-hero__line{margin:14px 0 0;font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:700;font-size:clamp(24px,2.4vw,34px);line-height:1.15;color:#fff;text-transform:uppercase}
+.khoa-hero__text{margin:0;font-size:15px;line-height:1.6;color:var(--k-mute);max-width:46ch}
+.khoa-hero__btns{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px}
+.khoa-hero__hint{font-size:11px;letter-spacing:.12em;color:var(--k-mute)}
+.khoa-hero__credit{position:absolute;right:clamp(16px,4vw,56px);bottom:18px;font-size:10px;letter-spacing:.16em;color:#56728f;z-index:2;pointer-events:none}
+
+.khoa-btn{display:inline-flex;align-items:center;gap:12px;min-height:56px;padding:0 26px;border-radius:6px;border:1px solid var(--k-line2);background:transparent;color:var(--k-ink)!important;
+  font:600 14px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.2em;text-decoration:none!important;cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.khoa-btn:hover,.khoa-btn:focus-visible{border-color:var(--k-cyan);color:#fff!important;outline:none}
+.khoa-btn--primary{background:var(--k-cyan);border-color:var(--k-cyan);color:#00131d!important}
+.khoa-btn--primary:hover,.khoa-btn--primary:focus-visible{background:#b8efff;color:#00131d!important}
+.khoa-btn:focus-visible{box-shadow:0 0 0 3px #6fdcff66}
+
+@media (max-width:900px){
+  .khoa-hero{height:max(var(--khoa-h,100vh),720px)}
+  .khoa-hero__over{top:28px;bottom:44px;transform:none;width:auto;right:16px;gap:10px}
+  .khoa-hero.is-onstage .khoa-hero__over{transform:translateX(-24px)}
+  .khoa-hero__text,.khoa-hero__hint{display:none}
+  .khoa-hero__btns{margin-top:auto}
+  .khoa-hero__btns .khoa-btn{flex:1 1 100%;justify-content:center}
+  .khoa-hero__credit{left:16px;right:16px;bottom:14px;text-align:center}
+}
+
+/* ---------- stage: the buttons on top, the dashboard full width under them */
+.khoa-stage__panels{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.khoa-stage__plbl{font-size:11px;letter-spacing:.3em;color:var(--k-mute);margin-right:6px}
+.khoa-panel{min-height:44px;padding:0 18px;border-radius:6px;border:1px solid var(--k-line2);background:#020b12;color:var(--k-dim);font:500 12px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.14em;cursor:pointer}
+.khoa-panel:hover,.khoa-panel:focus-visible{color:#fff;border-color:var(--k-cyan);outline:none}
+.khoa-panel.is-on{color:var(--k-cyan);border-color:var(--k-cyan);background:#06202c}
+.khoa-panel.is-on::after{content:" ●";font-size:9px}
+.khoa-stage__btns[hidden]{display:none!important}
+.khoa-stage__btns--crew{grid-template-columns:repeat(8,minmax(0,1fr))}
+.khoa-stage{display:flex;flex-direction:column;gap:18px}
+.khoa-stage__btns{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:10px}
+.khoa-sit{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:4px;min-height:64px;padding:0 14px;border-radius:8px;
+  background:#020b12;color:var(--k-dim);border:1px solid var(--k-line);font:500 12px/1.2 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-align:left;transition:border-color .2s,background .2s,color .2s;overflow:hidden}
+.khoa-sit:hover,.khoa-sit:focus-visible{border-color:var(--c);color:#fff;outline:none}
+.khoa-sit.is-on{background:#06202c;color:#fff;border-color:var(--c);box-shadow:0 0 18px color-mix(in srgb,var(--c) 30%,transparent)}
+.khoa-sit__key{font-size:10px;color:var(--k-mute)}
+.khoa-sit__name{max-width:100%;overflow-wrap:anywhere}
+.khoa-stage__hint{grid-column:1/-1;margin:2px 0 0;font-size:12px;line-height:1.6;color:var(--k-mute)}
+.khoa-stage__screen{position:relative;width:100%;height:var(--khoa-stage-h,640px);border:1px solid var(--k-line);border-radius:10px;overflow:hidden;background:var(--k-bg)}
+.khoa-stage__screen .khoa-frame{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.khoa-stage__start{position:absolute;inset:0;margin:auto;width:max-content;height:56px;padding:0 28px;border-radius:6px;border:1px solid var(--k-cyan);background:#020b12cc;color:#fff;
+  font:600 14px/1 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.2em;cursor:pointer}
+.khoa-stage__start:hover,.khoa-stage__start:focus-visible{background:#06202c;outline:none;box-shadow:0 0 0 3px #6fdcff55}
+.khoa-stage.is-loaded .khoa-stage__start{display:none}
+@media (max-width:1100px){ .khoa-stage__btns,.khoa-stage__btns--crew{grid-template-columns:repeat(4,minmax(0,1fr))} }
+@media (max-width:700px){
+  .khoa-stage__btns,.khoa-stage__btns--crew{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .khoa-stage__screen{height:min(var(--khoa-stage-h,640px),72vh)}
+  .khoa-sit{min-height:48px;padding:0 8px;font-size:10.5px;letter-spacing:0}
+  .khoa-sit__name{overflow-wrap:normal;word-break:keep-all}
+  .khoa-sit__key{display:none}
+}
+@media (prefers-reduced-motion:reduce){.khoa-hero__over{transition:none}}

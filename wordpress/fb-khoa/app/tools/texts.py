@@ -1,0 +1,80 @@
+# English -> Turkish for everything Khoa shows or says on the public site.
+TR = {
+ # intro
+ 'FB SERVER':'FB SERVER',
+ 'LENOVO IDEAPAD  ·  UBUNTU  ·  HOME OF THE CREW':'LENOVO IDEAPAD  ·  UBUNTU  ·  EKİBİN EVİ',
+ 'I am Khoa. The face of the server.':'Ben Khoa. Sunucunun yüzüyüm.',
+ 'This machine is FB Server. A Lenovo IdeaPad running Ubuntu, kept alive by a crew of eight agents. I am its body. Let me show you what I watch.':
+   'Bu makine FB Server. Ubuntu çalışan bir Lenovo IdeaPad; onu sekiz ajandan oluşan bir ekip ayakta tutuyor. Ben onun bedeniyim. Neyi izlediğimi göstereyim.',
+ 'BACKUP':'YEDEKLEME','EVERY NIGHT  ·  TO THE BACKUP DISK':'HER GECE  ·  YEDEK DİSKE',
+ 'When the backup runs, my veins turn green. Twenty eight gigabytes, every night, to the backup disk.':'Yedekleme çalışınca damarlarım yeşile döner. Her gece yirmi sekiz gigabayt, yedek diske.',
+ 'TEMPERATURE':'SICAKLIK','THE PROCESSOR  ·  WATCHED EVERY SECOND':'İŞLEMCİ  ·  HER SANİYE İZLENİYOR',
+ 'When the processor runs hot, I burn with it. The fans answer. If it goes critical, I throttle.':'İşlemci ısındığında ben de onunla yanarım. Fanlar cevap verir. Kritik olursa hızı düşürürüm.',
+ 'MEMORY':'BELLEK','SEVEN POINT TWO GIGABYTES':'YEDİ NOKTA İKİ GİGABAYT',
+ 'Memory pressure. When it fills, I swap to disk, and I tell you before it hurts.':'Bellek baskısı. Dolduğunda diske taşırım ve canın yanmadan önce sana söylerim.',
+ 'STORAGE':'DEPOLAMA','ONE TERABYTE  ·  COUNTED':'BİR TERABAYT  ·  SAYILIYOR',
+ 'When the disk fills, I sink. Every gigabyte left is counted.':'Disk doldukça batarım. Kalan her gigabayt sayılır.',
+ 'LOAD':'YÜK','FOUR CORES':'DÖRT ÇEKİRDEK',
+ 'High load. All four cores busy. I hold steady.':'Yüksek yük. Dört çekirdeğin hepsi meşgul. Ben dengede dururum.',
+ 'UPDATES':'GÜNCELLEMELER','UNATTENDED  ·  DAILY':'OTOMATİK  ·  HER GÜN',
+ 'Updates arrive quietly. I scan them in, package by package, and reboot when you allow it.':'Güncellemeler sessizce gelir. Onları paket paket içeri alırım ve sen izin verince yeniden başlatırım.',
+ 'SERVICES':'SERVİSLER','TWELVE  ·  ALWAYS RUNNING':'ON İKİ  ·  HEP ÇALIŞIYOR',
+ 'If a service falls, I feel it. Nginx. Cockpit. The web. I name what is down.':'Bir servis düşerse hissederim. Nginx. Cockpit. Web. Neyin çöktüğünü söylerim.',
+ 'INTRUSION':'SALDIRI','THE FIREWALL HOLDS':'GÜVENLİK DUVARI DAYANIYOR',
+ 'And if someone tries the door, I turn red. Every failed login is counted. The firewall holds.':'Biri kapıyı zorlarsa kırmızıya dönerim. Her başarısız giriş sayılır. Güvenlik duvarı dayanır.',
+ 'ALL SYSTEMS NOMINAL':'TÜM SİSTEMLER NORMAL','KHOA  ·  THE FACE OF THE SERVER':'KHOA  ·  SUNUCUNUN YÜZÜ',
+ 'KHOA &middot; THE FACE OF THE SERVER':'KHOA &middot; SUNUCUNUN YÜZÜ','THE FACE OF THE SERVER':'SUNUCUNUN YÜZÜ','SITUATION':'DURUM',
+ 'Situation cleared. All systems nominal. This is FB Server. I am Khoa, and I am watching.':'Durum temizlendi. Tüm sistemler normal. Burası FB Server. Ben Khoa, ve izliyorum.',
+ # situation clicks
+ 'Situation cleared. All systems nominal.':'Durum temizlendi. Tüm sistemler normal.',
+ 'Backup running. Twenty eight gigabytes to the backup disk.':'Yedekleme çalışıyor. Yirmi sekiz gigabayt yedek diske.',
+ 'Intrusion detected. Forty eight failed logins. Firewall holding.':'Saldırı tespit edildi. Kırk sekiz başarısız giriş. Güvenlik duvarı dayanıyor.',
+ 'Warning. CPU temperature ninety three degrees. Throttling. Cooling required.':'Uyarı. İşlemci sıcaklığı doksan üç derece. Hız düşürülüyor. Soğutma gerekli.',
+ 'Memory pressure. Ninety seven percent used. Swapping to disk.':'Bellek baskısı. Yüzde doksan yedi dolu. Diske taşınıyor.',
+ 'Disk almost full. Four gigabytes left on root.':'Disk neredeyse dolu. Kök bölümde dört gigabayt kaldı.',
+ 'High load. All four cores busy.':'Yüksek yük. Dört çekirdeğin hepsi meşgul.',
+ 'System update in progress. Twenty seven packages. Reboot after.':'Sistem güncelleniyor. Yirmi yedi paket. Sonra yeniden başlatma.',
+ 'Service down. Nginx, fbweb and cockpit are not responding.':'Servis çöktü. Nginx, fbweb ve cockpit yanıt vermiyor.',
+ # wake
+ 'Khoa online. All systems nominal.':'Khoa çevrimiçi. Tüm sistemler normal.',
+ 'Back. All systems nominal.':'Geri döndüm. Tüm sistemler normal.',
+ 'Welcome back.':'Tekrar hoş geldin.',
+ 'Khoa back online.':'Khoa yeniden çevrimiçi.',
+ # situation labels + gauges
+ 'NORMAL':'NORMAL','BACKUP RUNNING':'YEDEKLEME SÜRÜYOR','INTRUSION DETECTED':'SALDIRI TESPİT EDİLDİ','OVERHEATING':'AŞIRI ISINMA',
+ 'MEMORY PRESSURE':'BELLEK BASKISI','DISK ALMOST FULL':'DİSK NEREDEYSE DOLU','HIGH LOAD':'YÜKSEK YÜK','UPDATING':'GÜNCELLENİYOR','SERVICE DOWN':'SERVİS ÇÖKTÜ',
+ 'BACKUP TO DISK':'DİSKE YEDEK','THREAT LEVEL':'TEHDİT SEVİYESİ','CPU TEMPERATURE':'İŞLEMCİ SICAKLIĞI','SSD  ·  ROOT':'SSD  ·  KÖK',
+ 'SYSTEM LOAD':'SİSTEM YÜKÜ','SYSTEM UPDATE':'SİSTEM GÜNCELLEMESİ',
+ # buttons
+ '▶ INTRO':'▶ TANITIM','◈ SITUATIONS':'◈ DURUMLAR','☠ SCARY':'☠ KORKUNÇ','↻ REPLAY':'↻ TEKRAR','■ QUIET':'■ SESSİZ','◉ CAMERA':'◉ KAMERA','◉ CAMERA ON':'◉ KAMERA AÇIK',
+}
+# every line that is spoken (gets a recorded clip in both languages)
+SPOKEN = [
+ 'I am Khoa. The face of the server.',
+ 'This machine is FB Server. A Lenovo IdeaPad running Ubuntu, kept alive by a crew of eight agents. I am its body. Let me show you what I watch.',
+ 'When the backup runs, my veins turn green. Twenty eight gigabytes, every night, to the backup disk.',
+ 'When the processor runs hot, I burn with it. The fans answer. If it goes critical, I throttle.',
+ 'Memory pressure. When it fills, I swap to disk, and I tell you before it hurts.',
+ 'When the disk fills, I sink. Every gigabyte left is counted.',
+ 'High load. All four cores busy. I hold steady.',
+ 'Updates arrive quietly. I scan them in, package by package, and reboot when you allow it.',
+ 'If a service falls, I feel it. Nginx. Cockpit. The web. I name what is down.',
+ 'And if someone tries the door, I turn red. Every failed login is counted. The firewall holds.',
+ 'Situation cleared. All systems nominal. This is FB Server. I am Khoa, and I am watching.',
+ 'Situation cleared. All systems nominal.',
+ 'Backup running. Twenty eight gigabytes to the backup disk.',
+ 'Intrusion detected. Forty eight failed logins. Firewall holding.',
+ 'Warning. CPU temperature ninety three degrees. Throttling. Cooling required.',
+ 'Memory pressure. Ninety seven percent used. Swapping to disk.',
+ 'Disk almost full. Four gigabytes left on root.',
+ 'High load. All four cores busy.',
+ 'System update in progress. Twenty seven packages. Reboot after.',
+ 'Service down. Nginx, fbweb and cockpit are not responding.',
+ 'Khoa online. All systems nominal.',
+ 'Back. All systems nominal.',
+ 'Welcome back.',
+ 'Khoa back online.',
+]
+# how a caption is pronounced (caption text stays as written)
+SAY_EN = [('FB Server','F B Server'),('fbweb','F B web')]
+SAY_TR = [('FB Server','Fe Be Sörver'),('fbweb','Fe Be Web'),('Nginx','Encin iks'),('cockpit','kokpit'),('Cockpit','Kokpit'),('Web.','Veb.'),('gigabayt','gigabayt')]

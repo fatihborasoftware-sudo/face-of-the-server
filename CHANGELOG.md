@@ -2,6 +2,14 @@
 
 All versions are tags on this repository. Each one is a working pair of pages — fork whichever you like.
 
+## v1.3 — 28 September 2026 · Khoa on the web
+Khoa gets a public home: **[khoa.fbserver.net](https://khoa.fbserver.net)**, in English and Turkish, and the WordPress plugin that runs it is in `wordpress/`.
+- **FB Khoa plugin 1.2.1** (`wordpress/fb-khoa-1.2.1.zip`): Elementor widgets *Khoa Hero* and *Khoa Stage*, shortcodes `[khoa_hero]` and `[khoa_stage]`.
+- **Web versions** of both pages (`khoa-web.html`, `map-web.html`), built by patches from `index.html` and `map.html`: demo data only, three.js bundled, lite on phones, pause when off screen, a small `postMessage` API so the page can start the intro, switch situations and make agents speak.
+- **Recorded voice, two languages**: 24 English lines (Piper “Alan”) and 24 Turkish lines (Piper “dfki”, slower, 3 semitones deeper, faint metallic echo — “the voice of the server”).
+- **Command Map on the web**: a demo crew member speaks every 15 seconds — Khoa turns, raises his arm, clicks the node and opens the ID card. Crew cards cleaned (no white rims), Turkish text for all 14 cards.
+- **Full Turkish**: every dashboard label, gauge, date and status line follows the page language.
+
 ## v1.2 — 27 September 2026 · Khoa
 The figure gets a name, **Khoa**, and his own voice. He is no longer Serra's body — Serra stays the crew's voice; Khoa is the face of the server.
 - **Khoa's voice**: a deep Piper voice ("Alan") served by `khoa/khoa-tts.py`, a tiny local service on `127.0.0.1:8082`. Away from the server the page falls back to the browser's own voice (`speechSynthesis`), so it still talks when you open it from GitHub. `voices.html` lets you listen to the voice samples and pick one.

@@ -1,0 +1,234 @@
+# Face of the Server
+
+A living 3D particle figure for a server dashboard — it turns its head to follow you, assembles itself out of a swirl of particles when the page opens, glows when it speaks, and has a "scary" mode. One HTML file, no build step, no framework: three.js and hand-written GLSL shaders.
+
+![Khoa — the Face of the Server](docs/khoa.jpg)
+
+**Meet Khoa.** Since v1.2 the figure has a name and a voice: he speaks as the server, announces what is happening (backups, heat, intrusions…) and introduces himself. See [Khoa — the talking server](#khoa--the-talking-server) below.
+
+**New in v1.3: Khoa on a website.** A free WordPress plugin puts him on any site — live 3D, recorded voice in English and Turkish, the nine situations and the Command Map of his crew, all with demo data. See him live at **[khoa.fbserver.net](https://khoa.fbserver.net)** and read [Khoa on your WordPress site](#khoa-on-your-wordpress-site-v13).
+
+| | |
+|---|---|
+| ![Command Map](command-map.jpg) *Command Map — vitals on the figure, crew and apps around it* | ![Speaking](command-map-speaking.jpg) *The Watchman speaks: the arm clicks his node and his ID card opens* |
+| ![Scary](face-scary.jpg) *☠ SCARY mode* | ![Original](docs/face-of-the-server-screenshot.png) *v1.0, the first version* |
+
+Built by **Fatih Bora / FB Software Solutions** together with Claude (Anthropic) in one afternoon, for the *FB Server* project — a home Ubuntu server that talks to its owner through an AI crew. This figure is "the face of the server": the voice of the crew (Serra) gets a body on the dashboard.
+
+*Türkçe:* Bu proje bir sunucu panosu için canlı bir 3B parçacık figürü. Fareyi veya web kamerasını takip eder, sayfa açılınca parçacıklardan kendini kurar, konuşurken parlar. Tek bir HTML dosyası; kurulum yok. Nasıl yapıldığı adım adım aşağıda.
+
+---
+
+## Try it
+
+Open `index.html` in a modern browser (Chrome, Edge, Firefox). It needs internet once, to fetch three.js from cdnjs; everything else — including the 3D body — is inside the file.
+
+| Control | What it does |
+|---|---|
+| move the mouse | the head and eyes follow you; background dust and the camera parallax with the movement |
+| **idle / listening / thinking / speaking** | the four states of the assistant (rings pulse out of the head when listening, the core flickers when thinking, the figure lights up in rhythm with the voice when speaking) |
+| **↻ REPLAY** | replays the assembly: particles stream in from an orb and form the body |
+| **☠ SCARY** | blood-red palette, hot white eyes, head twitches, camera shake, screen tears |
+| **■ QUIET** | stops the voice |
+| **◉ CAMERA** | the figure looks at *you* through the webcam (face detection, motion fallback) — needs https or localhost |
+
+`map.html` is the **Command Map**: the same figure with the server's vitals on it — a beating heart with the network graph, load rings behind the body, the storage list, veins that light up per heartbeat and change colour with the server status — and a radial map of the AI crew and apps around it, each member with their ID card next to their node. When a crew member speaks, the figure raises an arm, clicks the node, and the member's ID card pops open with a sound.
+
+Add `?lite` to either page on a weak GPU (no bloom, fewer particles, no landscape). Localhost opens in lite mode by itself (that is the server's own screen).
+
+For your own app the only hook you need is:
+
+```js
+window.serraLookAt(nx, ny);   // nx, ny in -1..1 (screen coordinates); call it from a webcam face tracker
+```
+
+and the `speaking` state: push a pulse into `pulses` (see the `speak` button handler) while your TTS plays.
+
+---
+
+## Khoa — the talking server
+
+v1.2 gives the figure a name, **Khoa**, and a voice. Open `index.html` and press **▶ INTRO** — he introduces himself.
+
+| Control | What it does |
+|---|---|
+| **▶ INTRO** | the cinematic introduction: camera pushes in, captions appear word by word |
+| **◈ SITUATIONS** / keys **0–8** | simulate a server situation: backup, intrusion, heat, memory, ssd, load, update, alarm, normal — title, colour, gauge and a spoken sentence |
+| **♪ VOICE** | choose the voice (on the server: the Piper voices; elsewhere: your browser's voices) |
+
+**On your own server** Khoa talks through a small local service:
+
+```bash
+sudo cp khoa/khoa /usr/local/bin/khoa && sudo chmod +x /usr/local/bin/khoa
+python3 khoa/khoa-tts.py        # listens on 127.0.0.1:8082 (run it as a systemd service)
+khoa say "Fatih, the backup finished. Twenty eight gigabytes." --sit backup
+khoa say "The processor is at sixty three degrees." --sit heat --value 63
+```
+
+`khoa-tts.py` expects [Piper](https://github.com/rhasspy/piper) and its voices — change `PIPER` and `VOICES` at the top of the file to where yours are. The page polls `/queue?since=N` every 1.5 s and speaks each new line; a line with `--sit` switches the situation first. Hook it to anything: a backup script, a temperature check, failed logins. Without the service (for example when you open the page from GitHub) Khoa uses the browser's built-in voice.
+
+`voices.html` plays the voice samples side by side so you can pick one.
+
+---
+
+## Khoa on your WordPress site (v1.3)
+
+![khoa.fbserver.net](docs/website-hero.jpg)
+
+| | |
+|---|---|
+| ![Command Map on the site](docs/website-command-map.jpg) *PANELS → Command Map: make an agent speak, Khoa turns and opens the ID card* | ![Turkish](docs/website-face-tr.jpg) *The Turkish page: every label, voice line and card in Turkish* |
+
+The folder `wordpress/` holds **FB Khoa**, the plugin that runs [khoa.fbserver.net](https://khoa.fbserver.net). Install `wordpress/fb-khoa-1.2.1.zip` (Plugins → Add New → Upload Plugin) and you get two Elementor widgets — and two shortcodes if you do not use Elementor:
+
+| Widget / shortcode | What it shows |
+|---|---|
+| **Khoa Hero** / `[khoa_hero]` | Full-screen Khoa with your title and text; the **Meet Khoa** button plays his spoken intro, and your title fades while he talks |
+| **Khoa Stage** / `[khoa_stage]` | A **PANELS** switch — *Face of the Server* with the nine situation buttons, or the *Command Map* with “SPEAK · Serra … Mason” buttons |
+
+- **No server needed.** Everything runs on demo data; nothing connects to a real machine.
+- **Two languages.** English and Turkish, following the page language (Polylang, or the site language). Khoa’s lines are recorded with Piper — English “Alan”, Turkish “dfki” shaped as the *voice of the server* — and play from the plugin itself.
+- **Light on phones.** Phones get the lite renderer automatically, the Command Map shows the crew only, and Khoa pauses when he is scrolled out of view.
+- **Everything is editable.** Every text is a normal Elementor field; the page around Khoa is ordinary Elementor.
+
+How the web versions are made — the same idea as the patches on the server: `wordpress/fb-khoa/app/tools/patch_site.py` turns `index.html` into `khoa-web.html`, `patch_map.py` turns `map.html` into `map-web.html` (demo data, local three.js, recorded voice, Turkish texts in `texts.py`, `map_texts.py` and `web_i18n.py`, clean crew cards in `thumbs_clean.json`). Run them from that folder with the two source pages next to them.
+
+---
+
+## Khoa on a hologram fan (v1.4)
+Khoa also lives in the air: ready-made videos for a **3D hologram fan** (a spinning LED blade — black is invisible, so only Khoa and his gauges glow above the desk). Everything is in **[`hologram/`](hologram/)**.
+
+![natural mode on the fan](hologram/images/previews/06-khoa-natural-mode.jpg)
+
+- **An intro for FB Server** (Turkish) and **Khoa explaining himself** (English), with his body changing colour per topic — or bursting into dust while the matching **gauge** forms.
+- **Idle modes**: a 30 s loop, a 1-minute look-around (with a soft hum or just blips), a silent **natural mode** where the six gauges pop up with sci-fi sounds, and a **5-minute presentation idle mode** where the gauges tell a small story of the server's background work (release download).
+- **The nine situations** as separate 20 s clips.
+- **The tools**: the real Khoa page rendered frame by frame on a virtual clock, then gauges, dust morphs and sound design added in Python. Plus the mockups the looks were approved from.
+
+Every video is 768 × 768 on pure black, made for a 3dholo P30S; load them with the Holoscope app.
+
+Want to build it all yourself? **[MASTER-PROMPT.md](MASTER-PROMPT.md)** (English) and **[MASTER-PROMPT-TR.md](MASTER-PROMPT-TR.md)** (Türkçe) are the prompts to give Claude.
+
+## How it was made — step by step
+
+This is the honest history, including the wrong turns, because that is what the project is about: learning to build things with an AI by describing what you want and looking at the result.
+
+### 1. The reference
+The look comes from a demo video of a humanoid AI interface: a dark screen, a human bust drawn as glowing contour rings made of particles, an orange energy core where the face would be, warm "veins" running from the throat down the chest, a particle mountain landscape behind, and an *ASSEMBLING… 35 %* build-up where the body forms out of a swirl. We extracted 19 frames from the video and studied three close-ups (assembly, face, landscape) before writing any code.
+
+### 2. First try: a real scanned head (kept as a lesson)
+The very first version was a 3D scan of a real face — a free image-to-3D model (Hunyuan3D-2.1 on Hugging Face) turned a portrait into a mesh, and 90 000 of its points became a hologram. It worked, but a real face made of points looks like a ghost, not a presence. We moved on.
+
+### 3. A body from pure math
+Version two had no model file at all. The bust was a formula: for every height *y* and angle *θ* a radius — an ellipsoid for the head, a cylinder for the neck, a widening superellipse for the shoulders, smoothly joined with a soft-max. That gives a clean featureless humanoid in a few lines of JavaScript. It looked like the reference but "like a barrel" — so we added pectorals, a collarbone dip, rounded shoulders and a taper below the chest. Still math, still not human enough.
+
+### 4. Rendering: why it looked flat, and the fix
+Plain WebGL lines are one pixel wide and cannot glow. The reference glows because of **bloom**. So the renderer became a small post-processing pipeline written by hand (three.js r128 core only, no `examples/` add-ons):
+
+1. render the scene into a half-float render target (with MSAA when WebGL2 is available)
+2. extract the bright parts (`brightMat`, soft threshold)
+3. blur them at 5 resolutions — ½, ¼, ⅛, 1⁄16, 1⁄32 — with a separable 9-tap Gaussian (`blurMat`)
+4. composite: scene + weighted bloom levels, vignette, film grain, **ACES filmic tone mapping** (`compMat`)
+
+That single change made the difference between "kids' drawing" and the reference.
+
+### 5. The particle body
+Instead of drawing the surface, the figure is drawn as **points**: one particle per mesh vertex, plus a loose cloud around the crown of the head. Each point's brightness comes from a *fresnel* term — bright where the surface turns away from the camera — so the silhouette glows and the front stays faint, exactly like the reference. Every particle also has:
+
+- `aStart` — a position on a swirl arc where it starts, and `aSeed` — its own schedule; during assembly each particle flies from `aStart` to its place along a curved path (`uBuild` 0 → 1 drives it)
+- a "core weight" — how close it is to the face; those points turn orange and pulse with the voice
+- a subtle sine "wave" on the face so the rings wobble like heat over the core
+
+### 6. The head rig (mouse now, webcam later)
+There is no skeleton. The vertex shader bends the model above the neck: `bend(p)` rotates every point about a pivot by the current yaw/pitch, weighted by `smoothstep` over the neck so the turn fades in smoothly. The target comes from the mouse; the same function `serraLookAt(nx,ny)` is what a webcam face tracker will call. Idle wander kicks in after five seconds without input.
+
+### 7. Veins, dust, mountains
+- **Veins**: a tiny recursive growth algorithm (`grow()`) walks down the front of the body, drifting and branching, and each branch becomes a thin `TubeGeometry` with a flowing pulse; orange at the trunk, cyan at the tips. Positions on the surface come from a 2D lookup grid built from the mesh (`frontZ(x,y)`).
+- **Dust**: 5 000 particles around the figure. When the head turns, the dust is *swept* — the shader adds the head's angular velocity (`uDrift`), nearer dust more than far, so the background reacts to the movement.
+- **Mountains**: a point grid with ridged value noise for height; orange "rivers" are greedy downhill walks over that height field.
+
+### 8. Modes and the voice
+`idle / listening / thinking / speaking` are one string that drives uniforms (`uListen`, `uThink`, `uLevel`). Speech uses the browser's `speechSynthesis` (an en-GB female voice when available); word boundaries push a level that the core, veins and particles react to.
+
+### 9. The real body: a free écorché from Sketchfab
+The math bust was replaced by a real anatomical model: **"Male Full Body Ecorche" by Diego Luján García** (Sketchfab, CC BY 4.0). Image-to-3D generators were tried first (Hunyuan3D-2.1, TRELLIS) but the free GPU quota ran out; a ready-made free model was the better answer anyway.
+
+The GLB (26 MB, 640 k triangles, 16 sub-meshes) is far too big for a web page, so `tools/build_body.py` does the reduction:
+
+1. reads the GLB by hand (JSON + binary chunk, scene-graph transforms applied) — no 3D library needed
+2. crops to a bust (`--ycut -7`, everything below the waist dropped)
+3. **vertex clustering**: snaps vertices to a grid — fine cells on the head (0.13), coarse on the body (0.33) — and merges them: 640 k → 174 k triangles, 64 129 vertices (just under the 65 536 limit of 16-bit indices)
+4. normalises to the page's space (2.9 units tall, y up, centred)
+5. quantises: positions to `uint16`, normals to `int8`, a "tendon" byte from the texture, indices to `uint16`
+6. base64-encodes the lot (2.25 MB) and injects it into `index.html` as `const ECO`
+
+The page decodes it on load in a few milliseconds. The lit red-muscle surface shader is in the file but not added to the scene — the particle-only look was chosen on purpose.
+
+### 10. Things that were removed on purpose
+A hologram pass (scanlines, rolling band, colour fringe, flicker), a projector cone with a ringed base disc, and the halo ring were all built, looked at, and taken out again. The glitch effects survive only inside the scary mode. Building, looking, deleting is part of the method.
+
+---
+
+## Use your own 3D model
+
+```bash
+pip install numpy pillow
+python3 tools/build_body.py your-model.glb --ycut <y> --inject index.html
+```
+
+- `--ycut` is the model-space height below which everything is dropped (the script prints the model's y range first). Omit it to keep the whole model.
+- If the script says "too many vertices", raise `--body-cell` (e.g. `0.4`).
+- Any GLB works: the script applies the scene transforms and samples the base-colour texture if there is one (that is where the pale "tendon" tint comes from).
+- After injecting, check three numbers in `index.html` that depend on where the head is in *your* model: `PIVOT` (neck height), `bw()` in `bendGLSL` (where the bend fades in), and the core/eye positions in `aim()`.
+
+## Make it yours
+
+Everything is in one file per page, in plain JavaScript and GLSL, and every number is near a comment saying what it does. Places people usually start:
+
+| Want to change… | Look for |
+|---|---|
+| colours | `--cyan` / `--amber` in the CSS, `uVeinCol`, and `applyStatus()` for the status colours |
+| how fast / slow the assembly is | `BUILD_MS` |
+| the assembly sound, the click / open / close sounds | `window.sfx` (a tiny WebAudio synth — no sound files) |
+| how far the head turns, idle wander | `aim()`, `serraLookAt()` |
+| the arm gesture | `serraArm()`, `armL()` in `bendGLSL`, `gesture()` in map.html |
+| the heart, ECG, BPM | the `heart` canvas block (`BPM = 58 + cpu·0.8`) |
+| which agents / apps are on the map and where | the node list `N` in map.html (`x`, `y` are fractions of the screen) |
+| where the vitals come from | `data.json` from fbconsole and `/speaking` — replace the fetches with your own JSON |
+| the 3D body | `tools/build_body.py` (below) |
+
+The `tools/patch_*.py` scripts are the actual patches we applied on the server, one feature each (lite mode, webcam, camera tuning, assembly sound). They are a good template for adding your own feature without touching the rest: find an anchor line, replace it, keep it idempotent.
+
+Versions are tagged (`v1.1`, `v1.2`, `v1.3`, …) and listed in `CHANGELOG.md`, so you can fork any of them.
+
+## Files
+
+```
+index.html                              the Face — Khoa (2.4 MB, body data included)
+map.html                                the Command Map (Face + vitals + crew map)
+voices.html                             Khoa's voice samples
+khoa/khoa                               the `khoa say` command
+khoa/khoa-tts.py                        Khoa's voice + message queue (local service, port 8082)
+tools/build_body.py                     GLB → embedded body data (crop, decimate, quantise, inject)
+tools/patch_*.py                        every feature as its own patch, in the order it was built (see CHANGELOG.md)
+tools/webcam.js, thumbs.json, logo.b64  data used by the patches
+CHANGELOG.md                            what changed in each version
+wordpress/fb-khoa/                      the FB Khoa WordPress plugin (source)
+wordpress/fb-khoa-1.2.1.zip             the same plugin, ready to upload to WordPress
+docs/*.jpg, docs/*.png                  screenshots
+CREDITS.md                              who made what, licences
+LICENSE                                 MIT for the code in this repository
+```
+- `hologram/` — videos for a 3D hologram fan (v1.4): `videos/`, `videos/situations/`, `images/` (previews + mockups), `audio/` (voices, assemble sound), `tools/` (render + compositing + sound scripts, timelines). The 5-minute presentation video is a release download.
+- `MASTER-PROMPT.md`, `MASTER-PROMPT-TR.md` — copy-paste prompts to build your own Face of the Server with Claude (English / Türkçe).
+- `docs/lesson-html-block.html` — the live-demo block used on the fbsoftwaresolutions.com.tr lesson page.
+
+## Credits and licences
+
+- Code: MIT (see `LICENSE`).
+- Body mesh: **"Male Full Body Ecorche" by Diego Luján García** — Sketchfab, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). The credit must stay wherever the figure is shown (it is in the page footer).
+- three.js r128 — MIT.
+- Font: IBM Plex Mono (Google Fonts, OFL).
+- Concept reference: a humanoid-interface demo video (used for study only; nothing from it is in this repository).
+
+Made with Claude, in the "FB Server" project — watch the build-along videos on the **AI ile kendin yap** channel.

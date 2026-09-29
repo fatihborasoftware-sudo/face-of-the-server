@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Khoa · Canlı Demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#000306;--ink:#d6eeff;--dim:#7f99b3;--cy:#6fdcff;--line:#12324a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.5 "IBM Plex Mono",ui-monospace,monospace}
+.k{padding:18px 18px 14px;background:radial-gradient(120% 80% at 50% 0,#04121d 0,var(--bg) 60%)}
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px;letter-spacing:.18em;font-size:11px;color:var(--dim)}
+.top b{color:#fff;letter-spacing:.22em}
+.dot{width:8px;height:8px;border-radius:50%;background:#4dff7a;box-shadow:0 0 10px #4dff7a}
+.top a{margin-left:auto;color:var(--cy);text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;letter-spacing:.08em}
+.top a:hover{border-color:var(--cy)}
+.tabs{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+button{font:inherit;color:var(--ink);background:#06121c;border:1px solid var(--line);border-radius:9px;cursor:pointer}
+.tabs button{padding:9px 14px;letter-spacing:.06em}
+.tabs button.on{border-color:var(--cy);color:#fff;box-shadow:0 0 0 1px rgba(111,220,255,.25) inset}
+.btns{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:6px;margin-bottom:10px}
+.btns[hidden]{display:none}
+.btns button{padding:8px 10px;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.btns button small{display:block;color:var(--dim);font-size:10px}
+.btns button i{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;background:var(--c,#6fdcff);box-shadow:0 0 8px var(--c,#6fdcff)}
+.btns button.on{border-color:var(--c,#6fdcff);color:#fff}
+.stage{position:relative;width:100%;aspect-ratio:16/9;min-height:360px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#000}
+.stage iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.cover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px;background:radial-gradient(60% 60% at 50% 45%,rgba(111,220,255,.12),transparent 70%),#000306}
+.cover h2{margin:0;font:600 42px/1 "IBM Plex Mono",monospace;letter-spacing:.3em;color:#fff;text-shadow:0 0 24px rgba(111,220,255,.6)}
+.cover p{margin:0;color:var(--dim);letter-spacing:.2em;font-size:11px}
+.cover button{padding:12px 20px;background:var(--cy);color:#001018;border:0;font-weight:600;letter-spacing:.14em}
+body.on .cover{display:none}
+.hint{margin:10px 2px 0;color:var(--dim);font-size:11px}
+@media (max-width:600px){.k{padding:12px}.stage{aspect-ratio:3/4;min-height:420px}.cover h2{font-size:30px}.top a{margin-left:0}}
+</style>
+</head>
+<body>
+<div class="k">
+  <div class="top"><span class="dot"></span><b>KHOA</b> · SUNUCUNUN YÜZÜ · CANLI DEMO
+    <a href="https://khoa.fbserver.net/tr/" target="_blank" rel="noopener">Tam sayfa aç ↗</a></div>
+  <div class="tabs" role="tablist">
+    <button type="button" class="on" data-p="face">Sunucunun Yüzü</button>
+    <button type="button" data-p="map">Komuta Haritası</button>
+  </div>
+  <div class="btns" data-g="face">
+    <button type="button" data-sit="normal" style="--c:#4dff7a"><small>0</small><i></i>normal</button>
+    <button type="button" data-sit="backup" style="--c:#39ff6a"><small>1</small><i></i>yedekleme</button>
+    <button type="button" data-sit="intrusion" style="--c:#ff2a1a"><small>2</small><i></i>saldırı</button>
+    <button type="button" data-sit="heat" style="--c:#ff7a1a"><small>3</small><i></i>ısınma</button>
+    <button type="button" data-sit="memory" style="--c:#b86bff"><small>4</small><i></i>bellek</button>
+    <button type="button" data-sit="ssd" style="--c:#ffb347"><small>5</small><i></i>disk</button>
+    <button type="button" data-sit="load" style="--c:#e8f4ff"><small>6</small><i></i>yük</button>
+    <button type="button" data-sit="update" style="--c:#4aa8ff"><small>7</small><i></i>güncelleme</button>
+    <button type="button" data-sit="alarm" style="--c:#ff4a3a"><small>8</small><i></i>alarm</button>
+  </div>
+  <div class="btns" data-g="map" hidden>
+    <button type="button" data-talk="serra"><small>KONUŞ</small><i></i>Serra</button>
+    <button type="button" data-talk="watchman"><small>KONUŞ</small><i></i>Watchman</button>
+    <button type="button" data-talk="locke"><small>KONUŞ</small><i></i>Locke</button>
+    <button type="button" data-talk="corren"><small>KONUŞ</small><i></i>Corren</button>
+    <button type="button" data-talk="quill"><small>KONUŞ</small><i></i>Quill</button>
+    <button type="button" data-talk="dusk"><small>KONUŞ</small><i></i>Dusk</button>
+    <button type="button" data-talk="relay"><small>KONUŞ</small><i></i>Relay</button>
+    <button type="button" data-talk="mason"><small>KONUŞ</small><i></i>Mason</button>
+  </div>
+  <div class="stage">
+    <iframe id="kf" title="Khoa · Sunucunun Yüzü" allow="autoplay"></iframe>
+    <div class="cover"><h2>KHOA</h2><p>SUNUCUNUN YÜZÜ · 3D PANO</p><button type="button" id="go">▶ PANOYU AÇ</button><p>Demo veri · gerçek sunucu evde kalıyor</p></div>
+  </div>
+  <p class="hint">Bir durum seç: Khoa gerçek sunucudaki gibi tepki verir. Komuta Haritası'nda bir ajanı konuştur. Sesi duymak için panoya bir kez tıkla.</p>
+</div>
+<script>
+(function(){
+  var APP='https://khoa.fbserver.net/wp-content/plugins/fb-khoa/app/', Q='?embed=full&lang=tr&v=1.2.1';
+  var f=document.getElementById('kf'), panel='face';
+  function send(m){ m.khoa=1; try{ f.contentWindow.postMessage(m,'*'); }catch(e){} }
+  function load(then){
+    var want=APP+(panel==='map'?'map-web.html':'khoa-web.html')+Q;
+    if(f.getAttribute('src')!==want){
+      f.setAttribute('src',want); document.body.classList.add('on');
+      if(then) f.addEventListener('load',function(){ setTimeout(then,1400); },{once:true});
+    } else if(then) then();
+  }
+  function setPanel(p){
+    panel=p;
+    document.querySelectorAll('.tabs button').forEach(function(b){ b.classList.toggle('on',b.getAttribute('data-p')===p); });
+    document.querySelectorAll('[data-g]').forEach(function(g){ g.hidden=g.getAttribute('data-g')!==p; });
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b) return;
+    if(b.id==='go'){ load(); return; }
+    if(b.hasAttribute('data-p')){ setPanel(b.getAttribute('data-p')); if(document.body.classList.contains('on')) load(); return; }
+    if(b.hasAttribute('data-sit')){
+      var s=b.getAttribute('data-sit');
+      document.querySelectorAll('[data-sit]').forEach(function(x){ x.classList.toggle('on',x===b); });
+      setPanel('face'); load(function(){ send({cmd:'sit',name:s}); }); return;
+    }
+    if(b.hasAttribute('data-talk')){
+      var n=b.getAttribute('data-talk');
+      document.querySelectorAll('[data-talk]').forEach(function(x){ x.classList.toggle('on',x===b); });
+      setPanel('map'); load(function(){ send({cmd:'talk',name:n}); setTimeout(function(){ send({cmd:'talk',name:''}); },7000); });
+    }
+  });
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(en){ en.forEach(function(x){ send({cmd:'pause',on:!x.isIntersecting}); }); },{threshold:0.05}).observe(f);
+  }
+})();
+</script>
+</body>
+</html>

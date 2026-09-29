@@ -1,0 +1,1 @@
+(()=>{ try{ Object.defineProperty(window,'fbCamZoom',{get:()=>1,set:()=>{},configurable:true}); Object.defineProperty(window,'fbCamLookY',{get:()=>-0.45,set:()=>{},configurable:true}); }catch(e){} window.FB_VOICE_DEEP=0.2; })();

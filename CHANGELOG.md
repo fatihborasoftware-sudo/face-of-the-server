@@ -2,6 +2,15 @@
 
 All versions are tags on this repository. Each one is a working pair of pages — fork whichever you like.
 
+## v1.4 — 29 September 2026 · Khoa on a hologram fan
+Khoa leaves the screen: videos for a **3D hologram fan** (3dholo P30S), all in `hologram/`.
+- **Videos** (768 × 768, pure black): test clip, FB Server intro (Turkish), English self-introduction with colour per topic, English version with **gauges** (Khoa bursts into dust, the gauge forms and fills, he re-forms), 30 s idle loop, silent **natural mode** with sci-fi sound effects, 1-minute look-around (hum / blips), nine situation clips, and a **5-minute presentation idle mode** that tells a small story of the server's background work (release download, 106 MB).
+- **Gauges**: glowing ring, ticks, heartbeat line and value, in each mode's colour (backup, intrusion, heat, memory, disk, update).
+- **Dust morph**: particles sampled from Khoa and from the gauge scatter, swirl and land — both ways.
+- **Sound**: Khoa's real assemble sound captured from the page; English voice (Piper Alan) and new Turkish lines; synthesized effects (whoosh, lock-in hit, servo fill, ticks, heartbeat blips, alarm pulse, reform chime, head-turn blips).
+- **Tools**: frame-perfect rendering of the real page on a virtual clock (`clock.js`, `render_g.js`), compositing (`comp.py`, `gauge.py`, `morph.py`), sound design (`sfx.py`), timelines, mockup sheets.
+- **Prompts**: `MASTER-PROMPT.md` and the Turkish `MASTER-PROMPT-TR.md`.
+
 ## v1.3 — 28 September 2026 · Khoa on the web
 Khoa gets a public home: **[khoa.fbserver.net](https://khoa.fbserver.net)**, in English and Turkish, and the WordPress plugin that runs it is in `wordpress/`.
 - **FB Khoa plugin 1.2.1** (`wordpress/fb-khoa-1.2.1.zip`): Elementor widgets *Khoa Hero* and *Khoa Stage*, shortcodes `[khoa_hero]` and `[khoa_stage]`.

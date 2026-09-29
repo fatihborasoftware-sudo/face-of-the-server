@@ -95,6 +95,20 @@ How the web versions are made — the same idea as the patches on the server: `w
 
 ---
 
+## Khoa on a hologram fan (v1.4)
+Khoa also lives in the air: ready-made videos for a **3D hologram fan** (a spinning LED blade — black is invisible, so only Khoa and his gauges glow above the desk). Everything is in **[`hologram/`](hologram/)**.
+
+![natural mode on the fan](hologram/images/previews/06-khoa-natural-mode.jpg)
+
+- **An intro for FB Server** (Turkish) and **Khoa explaining himself** (English), with his body changing colour per topic — or bursting into dust while the matching **gauge** forms.
+- **Idle modes**: a 30 s loop, a 1-minute look-around (with a soft hum or just blips), a silent **natural mode** where the six gauges pop up with sci-fi sounds, and a **5-minute presentation idle mode** where the gauges tell a small story of the server's background work (release download).
+- **The nine situations** as separate 20 s clips.
+- **The tools**: the real Khoa page rendered frame by frame on a virtual clock, then gauges, dust morphs and sound design added in Python. Plus the mockups the looks were approved from.
+
+Every video is 768 × 768 on pure black, made for a 3dholo P30S; load them with the Holoscope app.
+
+Want to build it all yourself? **[MASTER-PROMPT.md](MASTER-PROMPT.md)** (English) and **[MASTER-PROMPT-TR.md](MASTER-PROMPT-TR.md)** (Türkçe) are the prompts to give Claude.
+
 ## How it was made — step by step
 
 This is the honest history, including the wrong turns, because that is what the project is about: learning to build things with an AI by describing what you want and looking at the result.
@@ -205,6 +219,9 @@ docs/*.jpg, docs/*.png                  screenshots
 CREDITS.md                              who made what, licences
 LICENSE                                 MIT for the code in this repository
 ```
+- `hologram/` — videos for a 3D hologram fan (v1.4): `videos/`, `videos/situations/`, `images/` (previews + mockups), `audio/` (voices, assemble sound), `tools/` (render + compositing + sound scripts, timelines). The 5-minute presentation video is a release download.
+- `MASTER-PROMPT.md`, `MASTER-PROMPT-TR.md` — copy-paste prompts to build your own Face of the Server with Claude (English / Türkçe).
+- `docs/lesson-html-block.html` — the live-demo block used on the fbsoftwaresolutions.com.tr lesson page.
 
 ## Credits and licences
 
